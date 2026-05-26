@@ -1,0 +1,146 @@
+{
+  "name": "vscode-yuque",
+  "displayName": "Cloud Notes - Yuque",
+  "description": "Browse and edit Yuque cloud notes in VSCode, with Claude Code AI agent integration via MCP",
+  "version": "0.1.0",
+  "publisher": "cloud-notes",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onView:cloudNotes.treeView"
+  ],
+  "main": "./dist/extension.js",
+  "bin": {
+    "cloud-notes-mcp": "./dist/cli.js"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "cloudNotes.loginYuque",
+        "title": "Cloud Notes: Login to Yuque",
+        "icon": "$(sign-in)"
+      },
+      {
+        "command": "cloudNotes.setupYuque",
+        "title": "Cloud Notes: Setup Yuque Credentials Manually"
+      },
+      {
+        "command": "cloudNotes.refresh",
+        "title": "Cloud Notes: Refresh",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "cloudNotes.openNote",
+        "title": "Cloud Notes: Open Note",
+        "icon": "$(open-preview)"
+      },
+      {
+        "command": "cloudNotes.openInBrowser",
+        "title": "Cloud Notes: Open in Browser",
+        "icon": "$(globe)"
+      },
+      {
+        "command": "cloudNotes.createNote",
+        "title": "Cloud Notes: Create New Note",
+        "icon": "$(new-file)"
+      },
+      {
+        "command": "cloudNotes.deleteNote",
+        "title": "Cloud Notes: Delete Note",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "cloudNotes.copyLink",
+        "title": "Cloud Notes: Copy Link"
+      },
+      {
+        "command": "cloudNotes.configureMcp",
+        "title": "Cloud Notes: Configure MCP for Claude Code"
+      }
+    ],
+    "views": {
+      "explorer": [
+        {
+          "id": "cloudNotes.treeView",
+          "name": "Cloud Notes"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "cloudNotes.loginYuque",
+          "when": "view == cloudNotes.treeView",
+          "group": "navigation@1"
+        },
+        {
+          "command": "cloudNotes.refresh",
+          "when": "view == cloudNotes.treeView",
+          "group": "navigation@2"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "cloudNotes.openNote",
+          "when": "view == cloudNotes.treeView && viewItem == doc",
+          "group": "inline"
+        },
+        {
+          "command": "cloudNotes.openInBrowser",
+          "when": "view == cloudNotes.treeView && viewItem =~ /doc|repo/",
+          "group": "navigation@1"
+        },
+        {
+          "command": "cloudNotes.createNote",
+          "when": "view == cloudNotes.treeView && viewItem == repo",
+          "group": "navigation@2"
+        },
+        {
+          "command": "cloudNotes.copyLink",
+          "when": "view == cloudNotes.treeView && viewItem =~ /doc|repo/",
+          "group": "navigation@3"
+        },
+        {
+          "command": "cloudNotes.deleteNote",
+          "when": "view == cloudNotes.treeView && viewItem == doc",
+          "group": "navigation@4"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Cloud Notes",
+      "properties": {
+        "cloudNotes.yuque.baseUrl": {
+          "type": "string",
+          "default": "https://www.yuque.com",
+          "description": "Yuque base URL (used for internal API calls)"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "node esbuild.config.mjs",
+    "watch": "node esbuild.config.mjs --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "package": "npx @vscode/vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^3.0.0",
+    "esbuild": "^0.24.0",
+    "typescript": "^5.5.0",
+    "vitest": "^2.0.0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.8.0",
+    "marked": "^15.0.0",
+    "zod": "^3.24.0"
+  }
+}
